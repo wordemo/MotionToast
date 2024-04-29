@@ -7,6 +7,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
 import android.os.CountDownTimer
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -43,6 +44,9 @@ class MotionToast {
         private var infoBackgroundToastColor: Int = R.color.info_bg_color
         private var deleteBackgroundToastColor: Int = R.color.delete_bg_color
 
+        private var xOffset: Int = 0
+        private var yOffset: Int = 0
+
         fun resetToastColors() {
             successToastColor = R.color.success_color
             errorToastColor = R.color.error_color
@@ -55,6 +59,9 @@ class MotionToast {
             warningBackgroundToastColor = R.color.warning_bg_color
             infoBackgroundToastColor = R.color.info_bg_color
             deleteBackgroundToastColor = R.color.delete_bg_color
+
+            xOffset = 0
+            yOffset = 0
         }
 
         fun setSuccessColor(color: Int) {
@@ -95,6 +102,14 @@ class MotionToast {
 
         fun setDeleteBackgroundColor(color: Int) {
             deleteBackgroundToastColor = color
+        }
+
+        fun setXOffset(offset: Int) {
+            xOffset = offset
+        }
+
+        fun setYOffset(offset: Int) {
+            yOffset = offset
         }
 
         // all toast CTA
@@ -1326,10 +1341,18 @@ class MotionToast {
         }
 
         private fun setGravity(position: Int, toast: Toast) {
-            if (position == GRAVITY_BOTTOM) {
-                toast.setGravity(position, 0, 100)
-            } else {
-                toast.setGravity(position, 0, 0)
+            when (position) {
+                GRAVITY_BOTTOM -> {
+                    toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, xOffset, yOffset)
+                }
+
+                GRAVITY_TOP -> {
+                    toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, xOffset, yOffset)
+                }
+
+                else -> {
+                    toast.setGravity(Gravity.CENTER, xOffset, yOffset)
+                }
             }
         }
 
